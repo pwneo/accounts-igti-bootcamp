@@ -18,3 +18,11 @@ export const listAll = async () =>{
         return {error: error.message};
     }
 }
+
+export const findOne = async (id) =>{
+    try {
+        return await Account.findOne({_id: '5f4be8f04ab1d23a883f6afb'});
+    } catch (error) {
+        return {error: error.message};
+    }
+}
