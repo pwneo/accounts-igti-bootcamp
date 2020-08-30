@@ -4,6 +4,10 @@ const Account = db.account;
 
 export const deposit = async ({agency, account, value}) => {
     try {
+        if(!await Account.findOne({agency, account})){
+            throw new Error('Account not found')
+        }
+
         await Account.findOneAndUpdate({agency, account}, {$inc:{balance: value}});
         const accountResult =  await Account.findOne({agency, account});
         return {balance: accountResult.balance};
@@ -14,6 +18,10 @@ export const deposit = async ({agency, account, value}) => {
 
 export const draft = async ({agency, account, value}) => {
     try {
+        if(!await Account.findOne({agency, account})){
+            throw new Error('Account not found')
+        }
+
         const accountFound = await Account.findOne({agency, account});
 
         if ((value + 1) > accountFound.balance || value <= 0){
@@ -37,6 +45,6 @@ export const balance = async ({account, agency}) => {
         const accountFound = await Account.findOne({agency, account});
         return {balance: accountFound.balance};
     } catch (error) {
-        return {error: error.message};
+        return {error: 'Account not found'};
     }
 }
