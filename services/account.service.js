@@ -2,26 +2,31 @@ import {db} from '../repositories/account.repository.js'
 
 const Account = db.account;
 
-export const create = async ({agencia, conta, nome, saldo}) => {
-    const account = new Account({agencia, conta, nome, saldo});
+export const deposit = async ({agency, account, value}) => {
     try {
-        return await account.save();
+        await Account.findOneAndUpdate({agency, account}, {$inc:{balance: value}});
+        const accountResult =  await Account.findOne({agency, account});
+        return {balance: accountResult.balance};
     } catch (error) {
         return {error: error.message};
     }
 }
 
-export const listAll = async () =>{
+export const draft = async ({agency, account, value}) => {
     try {
-        return await Account.find();
-    } catch (error) {
-        return {error: error.message};
-    }
-}
+        const accountFound = await Account.findOne({agency, account});
 
-export const findOne = async (id) =>{
-    try {
-        return await Account.findOne({_id: '5f4be8f04ab1d23a883f6afb'});
+        if ((value + 1) > accountFound.balance || value <= 0){
+            throw new Error('Não possível realizar o saque');
+        }
+
+        await Account.findOneAndUpdate(
+        {$and:[ {agency, account}, {balance: {$gte: (value + 1)}} ]},
+        {$inc:{balance: - (value + 1)}}
+        );
+
+        const accountResult =  await Account.findOne({agency, account});
+        return {balance: accountResult.balance};
     } catch (error) {
         return {error: error.message};
     }

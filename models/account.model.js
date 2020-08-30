@@ -1,18 +1,18 @@
 export const accountModel = ({Schema, model}) => {
     const schema = Schema({
-        agencia: {
+        agency: {
             type: Number,
             required: true
         },
-        conta: {
+        account: {
             type: Number,
             required: true
         },
-        nome: {
+        name: {
             type: String,
             required: true
         },
-        saldo: {
+        balance: {
             type: Number,
             required: true,
             min: 0
