@@ -20,3 +20,9 @@ export const connectDB = async () => {
         console.log(error);
     }
 };
+
+export const accountExists = async ({agency, account}) => {
+    if (!await db.account.findOne({agency, account})) {
+        throw new Error('Account not found')
+    }
+}
