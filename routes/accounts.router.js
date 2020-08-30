@@ -1,5 +1,5 @@
 import express from 'express';
-import {deposit, draft} from '../services/account.service.js';
+import {balance, deposit, draft} from '../services/account.service.js';
 
 export const router = express();
 
@@ -14,6 +14,14 @@ router.post('/deposit', async ({body}, res) => {
 router.post('/draft', async ({body}, res) => {
     try {
         res.send(await draft(body));
+    } catch (error) {
+        res.status(500).json({error: error})
+    }
+});
+
+router.post('/balance', async ({body}, res) => {
+    try {
+        res.send(await balance(body));
     } catch (error) {
         res.status(500).json({error: error})
     }

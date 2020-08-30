@@ -31,3 +31,12 @@ export const draft = async ({agency, account, value}) => {
         return {error: error.message};
     }
 }
+
+export const balance = async ({account, agency}) => {
+    try {
+        const accountFound = await Account.findOne({agency, account});
+        return {balance: accountFound.balance};
+    } catch (error) {
+        return {error: error.message};
+    }
+}
