@@ -21,8 +21,8 @@ export const connectDB = async () => {
     }
 };
 
-export const accountExists = async ({agency, account}) => {
-    if (!await db.account.findOne({agency, account})) {
+export const accountExists = async (account) => {
+    if (!await db.account.findOne({account})) {
         throw new Error('Account not found')
     }
 }
