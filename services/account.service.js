@@ -47,7 +47,6 @@ export const close = async ({account, agency}) => {
         await accountExists(account);
         await Account.findOneAndDelete({account, agency});
         const totalAccounts = await Account.find({agency});
-        console.log(totalAccounts.length);
         return {message: `Total agency Accounts ${agency}: ${totalAccounts.length}`};
     } catch (error) {
         return {error: 'Account not found'};
@@ -85,4 +84,18 @@ export const transfer = async ({accountTo, accountFrom, value}) => {
     } catch (error) {
         return {error: error.message};
     }
+}
+
+export const balanceAverage = async (agency) =>{
+    const [{totalBalance}] = await Account.aggregate([
+        {$match: {agency: parseInt(agency)}},
+        {$group: { _id: null, totalBalance:{$sum: "$balance"} }}
+    ]);
+
+    const [{account}] = await Account.aggregate([
+        {$match: {agency: parseInt(agency)}},
+        {$count: 'account'}
+    ]);
+
+   return {balanceAverage: (totalBalance / account).toFixed(2)};
 }

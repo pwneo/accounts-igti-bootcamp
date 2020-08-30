@@ -1,5 +1,5 @@
 import express from 'express';
-import {balance, close, deposit, draft, transfer} from '../services/account.service.js';
+import {balance, balanceAverage, close, deposit, draft, transfer} from '../services/account.service.js';
 
 export const router = express();
 
@@ -38,6 +38,14 @@ router.delete('/', async ({body}, res) => {
 router.post('/transfer', async ({body}, res) => {
     try {
         res.send(await transfer(body));
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+});
+
+router.get('/balanceAverage/:agency', async ({params:{agency}}, res) => {
+    try {
+        res.send(await balanceAverage(agency));
     } catch (error) {
         res.status(500).json({error: error.message});
     }
