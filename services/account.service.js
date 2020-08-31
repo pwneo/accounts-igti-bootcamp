@@ -101,6 +101,6 @@ export const balanceAverage = async (agency) =>{
 }
 
 export const lowestBalance = async (quantity) => {
-    const result = await Account.find().sort({balance: 1}).limit(parseInt(quantity));
-    console.log(result);
+    return await Account.find().sort({balance: 1}).limit(parseInt(quantity));
+
 }
