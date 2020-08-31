@@ -96,6 +96,11 @@ export const balanceAverage = async (agency) =>{
         {$match: {agency: parseInt(agency)}},
         {$count: 'account'}
     ]);
+    const average = (totalBalance / account).toFixed(2);
+   return {balanceAverage: average};
+}
 
-   return {balanceAverage: (totalBalance / account).toFixed(2)};
+export const lowestBalance = async (quantity) => {
+    const result = await Account.find().sort({balance: 1}).limit(parseInt(quantity));
+    console.log(result);
 }
