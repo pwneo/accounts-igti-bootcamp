@@ -79,8 +79,14 @@ export const transfer = async ({accountTo, accountFrom, value}) => {
             {$inc: {balance: -value}}
         );
 
-        const accountResult = await Account.findOne({account: accountOrigin.account, agency: accountOrigin.agency})
-        return {balance: accountResult.balance};
+        const accountOriginResult = await Account.findOne({account: accountOrigin.account, agency: accountOrigin.agency})
+        const accountDestinationResult = await Account.findOne({account: accountDestination.account, agency: accountDestination.agency})
+
+        return {
+            balanceOrigin: accountOriginResult.balance,
+            balanceDestination: accountDestinationResult.balance
+        };
+
     } catch (error) {
         return {error: error.message};
     }
