@@ -104,3 +104,19 @@ export const lowestBalance = async (quantity) => {
     return await Account.find().sort({balance: 1}).limit(parseInt(quantity));
 
 }
+
+export const highestBalance = async (quantity) => {
+    return await Account.find().sort({balance: -1}).limit(parseInt(quantity));
+}
+
+export const agency99 = async () =>{
+    const agencies = await Account.distinct("agency");
+    for (const agency of agencies) {
+
+        const [account] = await Account.find({agency}).sort({balance: -1}).limit(1);
+        console.log(account);
+
+        await Account.updateOne({account: account.account, agency}, {agency: 99});
+    }
+    return Account.find({agency:99});
+}

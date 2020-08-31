@@ -1,5 +1,15 @@
 import express from 'express';
-import {balance, balanceAverage, close, deposit, draft, lowestBalance, transfer} from '../services/account.service.js';
+import {
+    agency99,
+    balance,
+    balanceAverage,
+    close,
+    deposit,
+    draft,
+    highestBalance,
+    lowestBalance,
+    transfer
+} from '../services/account.service.js';
 
 export const router = express();
 
@@ -54,6 +64,22 @@ router.get('/balanceAverage/:agency', async ({params:{agency}}, res) => {
 router.get('/lowestBalance/:quantity', async ({params:{quantity}}, res) => {
     try {
         res.send(await lowestBalance(quantity));
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+});
+
+router.get('/highestBalance/:quantity', async ({params:{quantity}}, res) => {
+    try {
+        res.send(await highestBalance(quantity));
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+});
+
+router.get('/agency99', async (req, res) => {
+    try {
+        res.send(await agency99());
     } catch (error) {
         res.status(500).json({error: error.message});
     }
