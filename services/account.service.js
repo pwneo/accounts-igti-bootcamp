@@ -2,6 +2,29 @@ import {accountExists, db} from '../repositories/account.repository.js'
 
 const Account = db.account;
 
+export const create = async ({name, agency, account, value}) => {
+    try{
+        return await new Account({name, agency, account, balance: value}).save();
+    } catch (error){
+        throw new Error(error);
+    }
+}
+
+export const listAll = async () => {
+    return await Account.find();
+}
+
+export const findById = async ({id}) => {
+    return Account.findOne({_id: id});
+}
+
+export const update = async ({id}, {name, agency, account}) => {
+    await Account.findOneAndUpdate({_id: id}, {name, agency, account});
+    return Account.findOne({agency, account});
+}
+
+
+
 export const deposit = async ({agency, account, value}) => {
     try {
         await accountExists(account);
@@ -9,7 +32,7 @@ export const deposit = async ({agency, account, value}) => {
         const accountResult = await Account.findOne({agency, account});
         return {balance: accountResult.balance};
     } catch (error) {
-        return {error: error.message};
+        throw new Error(error.message);
     }
 }
 
@@ -18,7 +41,7 @@ export const draft = async ({agency, account, value}) => {
         await accountExists(account);
         const accountFound = Account.findOne({account, agency});
         if ((value + 1) > accountFound.balance || value <= 0) {
-            throw new Error('Não possível realizar o saque');
+            throw new Error('Operation is invalid');
         }
 
         await Account.findOneAndUpdate(
@@ -38,7 +61,7 @@ export const balance = async ({account, agency}) => {
         const accountFound = await Account.findOne({agency, account});
         return {balance: accountFound.balance};
     } catch (error) {
-        return {error: 'Account not found'};
+        throw new Error('Account not found');
     }
 }
 
@@ -94,12 +117,12 @@ export const transfer = async ({accountTo, accountFrom, value}) => {
 
 export const balanceAverage = async (agency) =>{
     const [{totalBalance}] = await Account.aggregate([
-        {$match: {agency: parseInt(agency)}},
+        {$match: {agency: agency}},
         {$group: { _id: null, totalBalance:{$sum: "$balance"} }}
     ]);
 
     const [{account}] = await Account.aggregate([
-        {$match: {agency: parseInt(agency)}},
+        {$match: {agency: agency}},
         {$count: 'account'}
     ]);
     const average = (totalBalance / account).toFixed(2);
@@ -107,12 +130,12 @@ export const balanceAverage = async (agency) =>{
 }
 
 export const lowestBalance = async (quantity) => {
-    return await Account.find().sort({balance: 1}).limit(parseInt(quantity));
+    return await Account.find().sort({balance: 1}).limit(quantity);
 
 }
 
 export const highestBalance = async (quantity) => {
-    return await Account.find().sort({balance: -1}).limit(parseInt(quantity));
+    return await Account.find().sort({balance: -1}).limit(quantity);
 }
 
 export const agency99 = async () =>{
