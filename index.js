@@ -1,6 +1,9 @@
 import express from 'express';
 import {accountRouter} from './routes/account.route.js';
 import {connectDB} from "./repositories/account.repository.js";
+import axios from 'axios';
+
+axios();
 
 connectDB();
 
