@@ -121,5 +121,5 @@ accountRouter.get('/agency99', async (req, res, next) => {
 
 /*Handle errors of the operations*/
 accountRouter.use(({message}, {method, baseUrl}, response, next) => {
-    response.status(400).send({ error: message });
+    response.status(500).send({ error: message });
 });

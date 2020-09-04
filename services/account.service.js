@@ -4,6 +4,7 @@ const Account = db.account;
 
 export const create = async ({name, agency, account, value}) => {
     try{
+        await accountExists({account});
         return await new Account({name, agency, account, balance: value}).save();
     } catch (error){
         throw new Error(error);
@@ -22,8 +23,6 @@ export const update = async ({id}, {name, agency, account}) => {
     await Account.findOneAndUpdate({_id: id}, {name, agency, account});
     return Account.findOne({agency, account});
 }
-
-
 
 export const deposit = async ({agency, account, value}) => {
     try {
