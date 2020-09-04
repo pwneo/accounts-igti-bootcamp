@@ -8,7 +8,7 @@ export const db = {
 
 export const connectDB = async () => {
     try {
-        await mongoose.connect(`mongodb+srv://pwneo:puruca2009@cluster0.vziki.mongodb.net/bank?retryWrites=true&w=majority`, {
+        await mongoose.connect('mongodb+srv://pwneo:puruca2009@cluster0.vziki.mongodb.net/bank?retryWrites=true&w=majority', {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useFindAndModify: false,

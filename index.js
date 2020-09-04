@@ -11,7 +11,7 @@ app.use(cors());
 
 app.use('/accounts', accountRouter);
 
-app.listen(port, () =>{
+app.listen(process.env.PORT || port, () =>{
     connectDB();
     console.log('API Iniciada');
 });
