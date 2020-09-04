@@ -12,7 +12,7 @@
     "nodemon": "^2.0.4"
   },
   "scripts": {
-    "start": "node -r --experimental-modules index.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
